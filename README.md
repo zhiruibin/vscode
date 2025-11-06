@@ -103,6 +103,84 @@ export PATH="/opt/homebrew/opt/node@20/bin:$PATH"
 ./scripts/code.sh
 ```
 
+### 后端服务（Backend Server）启动
+
+用于运行 Newma AI 后端服务（`server/newma-ai-backend`）。
+
+#### 编译后端服务
+
+```bash
+# 进入后端服务目录
+cd server/newma-ai-backend
+
+# 安装依赖（如果尚未安装）
+npm install
+
+# 编译 TypeScript 代码
+npm run build
+```
+
+#### 启动后端服务
+
+```bash
+# 确保 Node 20 在 PATH 中
+export PATH="/opt/homebrew/opt/node@20/bin:$PATH"
+
+# 进入后端服务目录
+cd server/newma-ai-backend
+
+# 启动服务（生产模式）
+npm start
+
+# 或开发模式（带 watch，自动重新编译）
+npm run dev
+```
+
+说明：
+- `npm start` 启动编译后的服务（`dist/server.js`）
+- `npm run dev` 启动开发模式，支持自动重新编译和热重载
+- 服务默认监听端口由环境变量或配置文件决定
+
+### VS Code Server 启动
+
+用于运行 VS Code Server（即浏览器访问的远程服务端）。
+
+```bash
+# 确保 Node 20 在 PATH 中
+export PATH="/opt/homebrew/opt/node@20/bin:$PATH"
+
+# 启动服务端（默认端口 9888，可通过 VSCODE_SERVER_PORT 覆盖）
+./scripts/code-server.sh --launch
+
+# 或不自动打开浏览器：
+./scripts/code-server.sh
+
+# 自定义端口（示例 9000）：
+VSCODE_SERVER_PORT=9000 ./scripts/code-server.sh --launch
+```
+
+说明：
+- 脚本会先执行 `build/lib/preLaunch.js`，确保 Electron/内置扩展与 Node 运行时就绪；随后调用 `out/server-main.js` 启动服务端。
+- `--launch` 会在启动完成后自动打开浏览器；不带 `--launch` 仅打印地址（日志中包含 `Web UI available at ...`）。
+
+### Web（纯 Web 形态）启动
+
+使用内置的 `@vscode/test-web` 启动本地 Web 形态（无需 Electron）。
+
+```bash
+# 确保 Node 20 在 PATH 中
+export PATH="/opt/homebrew/opt/node@20/bin:$PATH"
+
+# 启动 Web（默认 host=localhost, port=8080）
+./scripts/code-web.sh
+
+# 指定 host 与端口
+./scripts/code-web.sh --host 0.0.0.0 --port 8081
+
+# 启用 playground（会下载 vscode-web-playground）
+./scripts/code-web.sh --playground
+```
+
 ### 直接启动
 
 ```bash
