@@ -1,0 +1,71 @@
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+/* History Popup */
+.newma-history-popup {
+	background: var(--vscode-menu-background);
+	border: 1px solid var(--vscode-menu-border);
+	border-radius: 6px;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+	padding: 4px;
+	min-width: 180px;
+	z-index: 10000;
+}
+
+.newma-history-action {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	padding: 8px 12px;
+	border-radius: 4px;
+	cursor: pointer;
+	user-select: none;
+	transition: background-color 0.15s ease;
+}
+
+.newma-history-action:hover,
+.newma-history-action.hover {
+	background: var(--vscode-list-hoverBackground);
+}
+
+.newma-history-action.disabled {
+	opacity: 0.5;
+	cursor: not-allowed;
+}
+
+.newma-history-action.disabled:hover {
+	background: transparent;
+}
+
+.newma-history-action-label {
+	font-size: 13px;
+	line-height: 1.4;
+}
+
+.newma-history-action .codicon {
+	font-size: 16px;
+	width: 16px;
+	height: 16px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+/* pressed state for Show Chats action button */
+.monaco-workbench .actions-container .action-label.pressed {
+    background: var(--vscode-toolbar-activeBackground, var(--vscode-toolbar-hoverBackground, var(--vscode-list-hoverBackground)));
+    border-radius: 4px;
+}
+
+/* Improve accessibility focus when pressed */
+.monaco-workbench .actions-container .action-label.pressed:focus {
+    outline: none;
+}
+
+/* Ensure icon/text spacing remains consistent */
+.monaco-workbench .actions-container .action-label.pressed .codicon {
+    opacity: 1;
+}
+

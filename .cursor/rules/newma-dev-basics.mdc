@@ -1,0 +1,22 @@
+---
+alwaysApply: true
+description: Core Newma dev rules (env, build, launch) that apply to the whole repo
+---
+
+# Newma Dev Basics
+
+- Use Node 20 for all dev commands. Verified with v20.19.5. Prefer PATH prefix over switching global versions.
+- Do not run `out/main.js` directly with Node. Always launch via Electron.
+- Preferred launch path: `scripts/code.sh` (which runs preLaunch, syncs built-ins, then starts Electron).
+- Keep changes minimal and repeatable; do not bypass steps to hide issues. Fix root causes.
+- Product branding is Newma across all platforms. Icons must be platform-appropriate (macOS .icns, Windows .ico, Linux .png).
+
+Quick commands:
+
+```
+export PATH="/opt/homebrew/opt/node@20/bin:$PATH"  # macOS/Homebrew example
+npm ci
+npm run compile
+./scripts/code.sh
+```
+

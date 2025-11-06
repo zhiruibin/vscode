@@ -1,0 +1,169 @@
+{
+	"name": "newma-ai-assistant",
+	"displayName": "Newma AI Assistant",
+	"description": "AI-powered coding assistant for Newma",
+	"version": "0.1.0",
+	"publisher": "newma",
+	"engines": {
+		"vscode": "^1.106.0"
+	},
+	"categories": [
+		"Other",
+		"Machine Learning"
+	],
+	"keywords": [
+		"ai",
+		"assistant",
+		"chat",
+		"copilot",
+		"newma"
+	],
+	"activationEvents": [
+		"*"
+	],
+	"enabledApiProposals": [
+		"chatParticipantAdditions"
+	],
+	"main": "./out/extension.js",
+	"contributes": {
+		"commands": [
+			{
+				"command": "newma-ai-assistant.configure",
+				"title": "Configure AI Backend",
+				"category": "Newma AI"
+			},
+			{
+				"command": "newma-ai-assistant.test",
+				"title": "Test AI Connection",
+				"category": "Newma AI"
+			},
+			{
+				"command": "newma-ai.plan.inputEditor",
+				"title": "Plan: Open Input Editor",
+				"category": "Newma AI"
+			},
+			{
+				"command": "newma-ai.plan.useSelection",
+				"title": "Plan: Use Selection as Prompt",
+				"category": "Newma AI"
+			},
+			{
+				"command": "newma-ai.diagnostics",
+				"title": "Show Diagnostics (Startup Self-Check)",
+				"category": "Newma AI"
+			},
+			{
+				"command": "newma-ai.repair",
+				"title": "Repair: Use Node 20 and Relaunch Dev Host",
+				"category": "Newma AI"
+			},
+			{
+				"command": "newma-ai.selectMode",
+				"title": "Select Interaction Mode (Auto / Ask / Plan)",
+				"category": "Newma AI"
+			}
+		],
+		"views": {
+			"explorer": [
+				{
+					"id": "newmaPlanView",
+					"name": "Newma Plan"
+				}
+			]
+		},
+		"configuration": {
+			"title": "Newma AI Assistant",
+			"properties": {
+				"newma-ai-assistant.apiKey": {
+					"type": "string",
+					"default": "",
+					"description": "API key for the AI provider"
+				},
+				"newma-ai-assistant.endpoint": {
+					"type": "string",
+					"default": "http://127.0.0.1:3901/v1/chat",
+					"description": "Backend server URL for Newma chat (extension -> backend)"
+				},
+				"newma-ai-assistant.model": {
+					"type": "string",
+					"default": "deepseek-chat",
+					"description": "AI model to use"
+				},
+				"newma-ai-assistant.apiUrl": {
+					"type": "string",
+					"default": "https://api.deepseek.com/v1/chat/completions",
+					"description": "Third-party AI API URL (e.g., OpenAI/DeepSeek-compatible)"
+				},
+				"newma-ai-assistant.apiHeaders": {
+					"type": "object",
+					"default": {},
+					"description": "Additional HTTP headers for the AI API request"
+				},
+				"newma-ai-assistant.temperature": {
+					"type": "number",
+					"minimum": 0,
+					"maximum": 1,
+					"default": 0.2,
+					"description": "Sampling temperature (参考 Cursor：代码生成更推荐 0.1~0.3)"
+				},
+				"newma-ai-assistant.maxTokens": {
+					"type": "number",
+					"minimum": 1,
+					"default": 1000,
+					"description": "Maximum tokens for responses (参考 Cursor：1000~2000)"
+				},
+				"newma-ai-assistant.systemPrompt": {
+					"type": "string",
+					"default": "你是 Newma VS Code 助手。用中文回答。只基于提供的上下文，不猜测未知信息。优先给出结构化要点和可执行步骤，避免模板化空话。",
+					"description": "System prompt template applied to each request"
+				},
+				"newma-ai-assistant.interactionMode": {
+					"type": "string",
+					"enum": ["agent", "ask", "plan"],
+					"default": "agent",
+					"description": "Interaction mode: agent (auto execute), ask (confirm side effects), plan (generate then execute)"
+				}
+			}
+		},
+		"chatParticipants": [
+			{
+				"id": "newma-ai",
+				"name": "newma-ai",
+				"description": "Newma AI Assistant for coding help",
+				"locations": [
+					"panel"
+				],
+				"commands": [
+					{
+						"name": "explain",
+						"description": "Explain code or concepts"
+					},
+					{
+						"name": "generate",
+						"description": "Generate code or documentation"
+					},
+					{
+						"name": "refactor",
+						"description": "Refactor or optimize code"
+					},
+					{
+						"name": "mode",
+						"description": "Switch interaction mode (Agent/Ask/Plan)"
+					}
+				],
+				"isDefault": false
+			}
+		]
+	},
+	"scripts": {
+		"vscode:prepublish": "npm run compile",
+		"compile": "tsc -p ./",
+		"watch": "tsc -watch -p ./"
+	},
+	"devDependencies": {
+		"@types/vscode": "^1.85.0",
+		"@types/node": "16.x",
+		"typescript": "^4.9.4"
+	},
+	"dependencies": {}
+}

@@ -1,0 +1,28 @@
+---
+alwaysApply: false
+description: macOS icon configuration and cache refresh steps for Newma.app bundles
+globs: resources/darwin/**,build/lib/electron.ts
+---
+
+# macOS Icon Rules
+
+- Ensure macOS bundle uses Newma icon:
+  - `build/lib/electron.ts` should set: `darwinIcon: 'resources/darwin/newma.icns'`.
+  - Built app should contain `Contents/Resources/Newma.icns`.
+
+- Post-bundle, `Info.plist` should include robust icon keys:
+
+```
+CFBundleIconFile = Newma.icns
+CFBundleIconName = Newma
+CFBundleIcons:CFBundlePrimaryIcon:CFBundleIconFiles = ["Newma"]
+```
+
+- If Dock shows default Electron icon, refresh caches:
+
+```
+/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -kill -r -domain local -domain system -domain user
+rm -rf ~/Library/Caches/com.apple.iconservices.store ~/Library/Caches/com.apple.iconservices*
+killall Dock || true; killall Finder || true
+```
+

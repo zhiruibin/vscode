@@ -1,0 +1,113 @@
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+/* Mode Selector Button */
+/* Match the exact styling of .action-item.chat-attachment-button .action-label */
+.newma-mode-selector-button {
+	display: flex !important;
+	align-items: center;
+	gap: 2px;
+	overflow: hidden;
+	font-size: 11px;
+	padding: 0 4px;
+	border: 1px solid var(--vscode-chat-requestBorder, var(--vscode-input-background, transparent));
+	border-radius: 4px;
+	height: 18px;
+	max-width: 100%;
+	width: fit-content;
+	cursor: pointer !important;
+	color: var(--vscode-foreground);
+	transition: all 0.2s ease;
+	position: relative;
+	z-index: 1;
+	pointer-events: auto !important;
+	-webkit-user-select: none;
+	user-select: none;
+	box-sizing: border-box;
+	line-height: 18px;
+}
+
+.newma-mode-selector-button:hover {
+	background: var(--vscode-inputOption-hoverBackground);
+	border-color: var(--vscode-inputOption-activeBorder);
+}
+
+.newma-mode-selector-button:focus {
+	outline: 1px solid var(--vscode-focusBorder);
+	outline-offset: -1px;
+}
+
+.newma-mode-selector-button > .codicon {
+	font-size: 14px;
+	height: auto;
+	line-height: 18px;
+}
+
+.newma-mode-label {
+	user-select: none;
+	line-height: 18px;
+	display: inline-flex;
+	align-items: center;
+}
+
+.newma-mode-arrow {
+	font-size: 10px;
+	opacity: 0.7;
+	line-height: 18px;
+	display: inline-flex;
+	align-items: center;
+}
+
+/* Mode Selector Popup */
+.newma-mode-selector-popup {
+	background: var(--vscode-menu-background);
+	border: 1px solid var(--vscode-menu-border);
+	border-radius: 6px;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+	padding: 4px;
+	min-width: 180px;
+	z-index: 10000;
+}
+
+.newma-mode-option {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	padding: 8px 12px;
+	border-radius: 4px;
+	cursor: pointer;
+	user-select: none;
+	transition: background-color 0.15s ease;
+}
+
+.newma-mode-option:hover,
+.newma-mode-option.hover {
+	background: var(--vscode-list-hoverBackground);
+}
+
+.newma-mode-option.selected {
+	background: var(--vscode-list-activeSelectionBackground);
+	color: var(--vscode-list-activeSelectionForeground);
+}
+
+.newma-mode-option.selected:hover,
+.newma-mode-option.selected.hover {
+	background: var(--vscode-list-activeSelectionBackground);
+}
+
+.newma-mode-option-label {
+	font-size: 13px;
+	line-height: 1.4;
+}
+
+.newma-mode-option .codicon {
+	font-size: 16px;
+	width: 16px;
+	height: 16px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+

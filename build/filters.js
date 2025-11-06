@@ -65,6 +65,13 @@ module.exports.unicodeFilter = [
 	'!src/vs/base/browser/dompurify/**',
 	'!src/vs/workbench/services/keybinding/browser/keyboardLayouts/**',
 	'!src/vs/workbench/contrib/terminal/common/scripts/psreadline/**',
+	'!extensions/newma-ai-assistant/**',
+	'!src/vs/platform/newmaAi/**',
+	'!src/vs/workbench/contrib/newma/**',
+	'!debug_electron.js',
+	'!rename-to-newma.*',
+	'!start-newma.sh',
+	'!test-*.mjs',
 ];
 
 module.exports.indentationFilter = [
@@ -109,6 +116,14 @@ module.exports.indentationFilter = [
 	'!build/win32/**',
 	'!build/checker/**',
 	'!src/vs/workbench/contrib/terminal/common/scripts/psreadline/**',
+	'!extensions/newma-ai-assistant/**',
+	'!src/vs/platform/newmaAi/**',
+	'!src/vs/workbench/contrib/newma/**',
+	'!debug_electron.js',
+	'!rename-to-newma.*',
+	'!rename-config.json',
+	'!start-newma.sh',
+	'!test-*.mjs',
 
 	// except multiple specific files
 	'!**/package.json',
@@ -187,6 +202,13 @@ module.exports.copyrightFilter = [
 	'!extensions/html-language-features/server/src/modes/typescript/*',
 	'!extensions/*/server/bin/*',
 	'!src/vs/workbench/contrib/terminal/common/scripts/psreadline/**',
+	'!extensions/newma-ai-assistant/**',
+	'!src/vs/platform/newmaAi/**',
+	'!src/vs/workbench/contrib/newma/**',
+	'!debug_electron.js',
+	'!rename-to-newma.*',
+	'!start-newma.sh',
+	'!test-*.mjs',
 ];
 
 module.exports.tsFormattingFilter = [

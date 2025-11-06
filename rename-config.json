@@ -1,0 +1,187 @@
+{
+  "branding": {
+    "name": "Newma",
+    "tagline": "AI-Powered Code Editor",
+    "description": "The intelligent code editor that understands your code",
+    "version": {
+      "major": 1,
+      "minor": 0,
+      "patch": 0,
+      "build": "2024.1"
+    },
+    "colors": {
+      "primary": "#007ACC",
+      "secondary": "#1E1E1E",
+      "accent": "#FF6B35",
+      "background": "#FFFFFF"
+    }
+  },
+  "replacements": {
+    "product": {
+      "Visual Studio Code": "Newma",
+      "VS Code": "Newma",
+      "Code - OSS": "Newma",
+      "Code OSS": "Newma",
+      "vscode": "newma",
+      "code-oss": "newma"
+    },
+    "executables": {
+      "code": "newma",
+      "code-oss": "newma",
+      "Code": "Newma"
+    },
+    "packages": {
+      "vscode": "newma",
+      "code-oss": "newma",
+      "microsoft.vscode": "newma.editor"
+    },
+    "urls": {
+      "code.visualstudio.com": "newma.top",
+      "vscode.dev": "newma.top",
+      "github.com/microsoft/vscode": "github.com/newma/newma"
+    },
+    "identifiers": {
+      "com.vscode.oss": "com.newma.editor",
+      "com.microsoft.vscode": "com.newma.editor"
+    }
+  },
+  "fileOperations": {
+    "rename": [
+      {
+        "from": "Code - OSS.app",
+        "to": "Newma.app",
+        "type": "directory"
+      },
+      {
+        "from": "code",
+        "to": "newma",
+        "type": "file"
+      },
+      {
+        "from": "code-oss",
+        "to": "newma",
+        "type": "file"
+      },
+      {
+        "from": ".vscode",
+        "to": ".newma",
+        "type": "directory"
+      },
+      {
+        "from": "vscode.json",
+        "to": "newma.json",
+        "type": "file"
+      }
+    ],
+    "resources": [
+      {
+        "from": "resources/win32/code.ico",
+        "to": "resources/win32/newma.ico"
+      },
+      {
+        "from": "resources/darwin/code.icns",
+        "to": "resources/darwin/newma.icns"
+      },
+      {
+        "from": "resources/linux/code.png",
+        "to": "resources/linux/newma.png"
+      }
+    ]
+  },
+  "packageJson": {
+    "name": "newma",
+    "displayName": "Newma",
+    "description": "AI-Powered Code Editor",
+    "homepage": "https://newma.top/",
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/newma/newma.git"
+    },
+    "bugs": {
+      "url": "https://github.com/newma/newma/issues"
+    }
+  },
+  "productJson": {
+    "nameShort": "Newma",
+    "nameLong": "Newma",
+    "applicationName": "newma",
+    "win32AppId": "com.newma.editor",
+    "win32x64AppId": "com.newma.editor",
+    "win32arm64AppId": "com.newma.editor",
+    "darwinBundleIdentifier": "com.newma.editor",
+    "linuxAppId": "com.newma.editor",
+    "urlProtocol": "newma",
+    "dataFolderName": ".newma",
+    "serverApplicationName": "newma-server",
+    "serverDataFolderName": ".newma-server",
+    "webUrl": "https://newma.top"
+  },
+  "fileTypes": [
+    ".ts",
+    ".js",
+    ".json",
+    ".md",
+    ".html",
+    ".css",
+    ".yml",
+    ".yaml",
+    ".xml",
+    ".sh",
+    ".bat"
+  ],
+  "excludeDirs": [
+    ".git",
+    "node_modules",
+    ".backup",
+    "out",
+    "dist",
+    ".vscode",
+    ".newma"
+  ],
+  "excludeFiles": [
+    "rename-to-newma.ts",
+    "rename-to-newma.sh",
+    "rename-config.json",
+    "rename-report.md"
+  ],
+  "buildFiles": [
+    "build/gulpfile.vscode*.js",
+    "build/gulpfile.vscode*.ts"
+  ],
+  "documentation": [
+    "README.md",
+    "CONTRIBUTING.md",
+    "LICENSE.txt",
+    "CHANGELOG.md"
+  ],
+  "validation": {
+    "packageJson": {
+      "name": "newma",
+      "displayName": "Newma"
+    },
+    "productJson": {
+      "nameShort": "Newma",
+      "applicationName": "newma"
+    },
+    "executables": [
+      "newma",
+      "Newma.app"
+    ]
+  },
+  "features": {
+    "aiFeatures": {
+      "chatCommand": "/newma",
+      "completionTrigger": "Ctrl+Space",
+      "aiPanel": "Newma AI Panel"
+    },
+    "uiElements": {
+      "logo": "Newma Logo",
+      "splashScreen": "Newma Splash",
+      "welcomePage": "Newma Welcome"
+    },
+    "errorMessages": {
+      "aiServiceError": "Newma AI service is temporarily unavailable",
+      "connectionError": "Unable to connect to Newma servers"
+    }
+  }
+}

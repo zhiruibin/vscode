@@ -1,0 +1,25 @@
+---
+alwaysApply: false
+description: Troubleshooting for Newma dev runs (ESM/CJS, built-ins, ENOENT, mirrors)
+---
+
+# Troubleshooting
+
+## ESM/CJS crash: "Cannot read properties of undefined (reading 'exports')"
+- Root cause: Node 22 ESM/CJS translator strictness.
+- Fix: Use Node 20.19.5; ensure PATH points to Node 20 for compile and launch.
+
+## glob promisify error
+- Symptom: `ERR_INVALID_ARG_TYPE` when `promisify(require('glob'))`.
+- Fix: Prefer Node 20; or import a compatible `glob` function. Our baseline works with Node 20.
+
+## Built-in extensions EPERM on control.json
+- Cause: home directory ACL/xattr.
+- Fix: Use default flow; if needed, relocate control under workspace or repair permissions. Avoid ad-hoc rights on `~/.vscode-oss-dev`.
+
+## ENOENT: out/nls.messages.json
+- Fix: `npm run compile`.
+
+## Electron download timeout
+- Fix: set `ELECTRON_MIRROR` to a reachable mirror when necessary.
+
