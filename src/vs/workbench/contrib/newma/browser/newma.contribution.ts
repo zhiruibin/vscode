@@ -870,6 +870,10 @@ class NewmaAgentBootstrapContribution implements IWorkbenchContribution {
 					anchorAlignment: AnchorAlignment.LEFT,
 					render: (container: HTMLElement) => {
 						container.classList.add('newma-history-popup');
+						// Fix popup width
+						container.style.width = '360px';
+						container.style.maxWidth = '360px';
+						container.style.minWidth = '360px';
 
 						const targetWindow = getWindow(container);
 
@@ -946,15 +950,66 @@ class NewmaAgentBootstrapContribution implements IWorkbenchContribution {
 							for (const item of history) {
 								const row = append(container, $('div.newma-history-action'));
 								row.tabIndex = 0;
-								const label = append(row, $('span.newma-history-action-label'));
-								label.textContent = item.title || `Chat ${item.sessionId}`;
+								row.style.display = 'flex';
+								row.style.alignItems = 'center';
+								row.style.gap = '8px';
+								row.style.justifyContent = 'space-between';
+
+								// title (truncate to 200px with ellipsis)
+								const titleEl = append(row, $('span.newma-history-action-label'));
+								const fullTitle = item.title || `Chat ${item.sessionId}`;
+								titleEl.textContent = fullTitle;
+								titleEl.title = fullTitle;
+								titleEl.style.maxWidth = '200px';
+								titleEl.style.overflow = 'hidden';
+								titleEl.style.textOverflow = 'ellipsis';
+								titleEl.style.whiteSpace = 'nowrap';
+								titleEl.style.flex = '1 1 auto';
+
+								// delete button (hidden visually until hover, but space reserved)
+								const delBtn = append(row, $('button.newma-history-delete')) as HTMLButtonElement;
+								delBtn.textContent = 'DEL';
+								delBtn.title = localize('newma.history.delete', 'Delete chat');
+								delBtn.style.border = 'none';
+								delBtn.style.background = 'transparent';
+								delBtn.style.cursor = 'pointer';
+								delBtn.style.fontSize = '11px';
+								delBtn.style.flex = '0 0 auto';
+								delBtn.style.width = '36px';
+								delBtn.style.visibility = 'hidden';
+								delBtn.style.color = 'var(--vscode-foreground)';
+								delBtn.style.opacity = '0.7';
+
+								// hover styles - show on hover but keep layout
+								row.addEventListener('mouseenter', () => { delBtn.style.visibility = 'visible'; });
+								row.addEventListener('mouseleave', () => { delBtn.style.visibility = 'hidden'; });
+
+								// open on row click
 								row.addEventListener('click', async (e: MouseEvent) => {
 									e.preventDefault();
 									e.stopPropagation();
 									const view = await this.viewsService.openView<ChatViewPane>(ChatViewId);
 									await view?.loadSession?.(item.sessionId);
+									// If the session has no title, set from history item (fallback to 'Newma AI')
+									const model = this.chatService.getSession(item.sessionId);
+									const histTitle = (item.title || '').trim() || 'Newma AI';
+									if (model && (!model.title || !model.title.trim())) {
+										try { this.chatService.setChatSessionTitle(item.sessionId, histTitle); } catch { /* ignore */ }
+									}
 									this.setPressedState(false);
 									this.contextViewService.hideContextView();
+								});
+
+								// delete handler
+								delBtn.addEventListener('click', async (e: MouseEvent) => {
+									e.preventDefault();
+									e.stopPropagation();
+									await this.chatService.removeHistoryEntry(item.sessionId);
+									// re-render: close then reopen quickly to reflect list change
+									this.contextViewService.hideContextView();
+									this.setPressedState(false);
+									// Show again with updated history
+									this.showPopup(anchor).catch(() => void 0);
 								});
 							}
 						}
