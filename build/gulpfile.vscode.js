@@ -33,7 +33,10 @@ const minimist = require('minimist');
 const { compileBuildWithoutManglingTask, compileBuildWithManglingTask } = require('./gulpfile.compile');
 const { compileNonNativeExtensionsBuildTask, compileNativeExtensionsBuildTask, compileAllExtensionsBuildTask, compileExtensionMediaBuildTask, cleanExtensionsBuildTask } = require('./gulpfile.extensions');
 const { promisify } = require('util');
-const glob = promisify(require('glob'));
+// Support both glob v7 (function export) and v9+ (object with .glob or default)
+const globModule = require('glob');
+const globFunction = typeof globModule === 'function' ? globModule : (globModule.glob || globModule.default);
+const glob = promisify(globFunction);
 const rcedit = promisify(require('rcedit'));
 
 // Build

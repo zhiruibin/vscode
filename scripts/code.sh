@@ -5,6 +5,8 @@ set -e
 if [[ "$OSTYPE" == "darwin"* ]]; then
 	realpath() { [[ $1 = /* ]] && echo "$1" || echo "$PWD/${1#./}"; }
 	ROOT=$(dirname "$(dirname "$(realpath "$0")")")
+	# Ensure Node 20 availability on macOS/Homebrew
+	export PATH="/opt/homebrew/opt/node@20/bin:$PATH"
 else
 	ROOT=$(dirname "$(dirname "$(readlink -f $0)")")
 	# If the script is running in Docker using the WSL2 engine, powershell.exe won't exist
@@ -47,8 +49,9 @@ function code() {
 		DISABLE_TEST_EXTENSION=""
 	fi
 
-	# Launch Code
-	exec "$CODE" . $DISABLE_TEST_EXTENSION "$@"
+	# Launch Code (remove Newma extension references; Core is authoritative)
+	EXTRA_ARGS=( $DISABLE_TEST_EXTENSION )
+	exec "$CODE" . "${EXTRA_ARGS[@]}" "$@"
 }
 
 function code-wsl()

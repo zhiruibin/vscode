@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import es from 'event-stream';
+import * as es from 'event-stream';
 import { basename } from 'path';
 import File from 'vinyl';
 

@@ -132,6 +132,7 @@ import { McpManagementChannel } from '../../../platform/mcp/common/mcpManagement
 import { AllowedMcpServersService } from '../../../platform/mcp/common/allowedMcpServersService.js';
 import { IMcpGalleryManifestService } from '../../../platform/mcp/common/mcpGalleryManifest.js';
 import { McpGalleryManifestIPCService } from '../../../platform/mcp/common/mcpGalleryManifestServiceIpc.js';
+import { NewmaBackendHost, NEWMA_IPC_CHANNEL } from '../../../platform/newmaAi/node/newmaBackendHost.js';
 
 class SharedProcessMain extends Disposable implements IClientConnectionFilter {
 
@@ -460,6 +461,14 @@ class SharedProcessMain extends Disposable implements IClientConnectionFilter {
 		// Web Content Extractor
 		const webContentExtractorChannel = ProxyChannel.fromService(accessor.get(ISharedWebContentExtractorService), this._store);
 		this.server.registerChannel('sharedWebContentExtractor', webContentExtractorChannel);
+
+		// Newma AI channel (inject required services)
+		const newmaChannel = new NewmaBackendHost(
+			accessor.get(IProductService),
+			accessor.get(IRequestService),
+			accessor.get(IConfigurationService)
+		);
+		this.server.registerChannel(NEWMA_IPC_CHANNEL, newmaChannel);
 	}
 
 	private registerErrorHandler(logService: ILogService): void {

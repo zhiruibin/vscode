@@ -358,7 +358,10 @@ export class ChatService extends Disposable implements IChatService {
 
 		const defaultAgentData = this.chatAgentService.getContributedDefaultAgent(location) ?? this.chatAgentService.getContributedDefaultAgent(ChatAgentLocation.Chat);
 		if (!defaultAgentData) {
-			throw new ErrorNoTelemetry('No default agent contributed');
+			// For custom AI implementations, bypass the default agent requirement
+			// This allows Chat to work without requiring a default agent
+			console.log('No default agent contributed, but continuing for custom AI implementation');
+			return;
 		}
 
 		// Await activation of the extension provided agent

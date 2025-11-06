@@ -22,15 +22,35 @@ function log(dir, message) {
 function run(command, args, opts) {
 	log(opts.cwd || '.', '$ ' + command + ' ' + args.join(' '));
 
-	const result = cp.spawnSync(command, args, opts);
+	// Prefer invoking npm via node to avoid relying on /bin/sh or shell resolution
+	// This prevents ENOENT: spawnSync /bin/sh when shell is unavailable/restricted
+	let result;
+	const npmCli = process.env['npm_execpath']; // path to npm CLI js if available
+	if (npmCli) {
+		// Run: node <npm_cli_js> <args...>
+		const nodeExe = process.execPath;
+		const finalArgs = [npmCli, ...args];
+		const finalOpts = { ...opts, shell: false }; // no shell needed on *nix
+		result = cp.spawnSync(nodeExe, finalArgs, finalOpts);
+	} else {
+		const finalOpts = { ...opts, shell: process.platform === 'win32' ? true : false };
+		result = cp.spawnSync(command, args, finalOpts);
+	}
 
 	if (result.error) {
 		console.error(`ERR Failed to spawn process: ${result.error}`);
+		if (opts.__allowFailure) {
+			return { status: result.status ?? 1 };
+		}
 		process.exit(1);
 	} else if (result.status !== 0) {
 		console.error(`ERR Process exited with code: ${result.status}`);
+		if (opts.__allowFailure) {
+			return { status: result.status };
+		}
 		process.exit(result.status);
 	}
+	return { status: 0 };
 }
 
 /**
@@ -43,7 +63,8 @@ function npmInstall(dir, opts) {
 		...(opts ?? {}),
 		cwd: dir,
 		stdio: 'inherit',
-		shell: true
+		// Avoid forcing a shell on non-Windows platforms to prevent /bin/sh ENOENT
+		shell: process.platform === 'win32'
 	};
 
 	const command = process.env['npm_command'] || 'install';
@@ -69,7 +90,10 @@ function npmInstall(dir, opts) {
 		run('sudo', ['chown', '-R', `${userinfo.uid}:${userinfo.gid}`, `${path.resolve(root, dir)}`], opts);
 	} else {
 		log(dir, 'Installing dependencies...');
-		run(npm, command.split(' '), opts);
+		const res = run(npm, command.split(' '), opts);
+		if (opts.__allowFailure && res.status !== 0) {
+			log(dir, `Skipping optional install (status ${res.status})`);
+		}
 	}
 	removeParcelWatcherPrebuild(dir);
 }
@@ -179,6 +203,12 @@ for (let dir of dirs) {
 
 		setNpmrcConfig('remote', opts.env);
 		npmInstall(dir, opts);
+		continue;
+	}
+
+	// For selfhost helper extensions, allow failure and do not abort overall install
+	if (dir.startsWith('.vscode/extensions/vscode-selfhost-')) {
+		npmInstall(dir, { __allowFailure: true });
 		continue;
 	}
 

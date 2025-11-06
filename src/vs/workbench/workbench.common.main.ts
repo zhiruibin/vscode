@@ -58,6 +58,7 @@ import '../platform/mcp/common/mcpResourceScannerService.js';
 import './services/workspaces/common/editSessionIdentityService.js';
 import './services/workspaces/common/canonicalUriService.js';
 import './services/extensions/browser/extensionUrlHandler.js';
+import './contrib/newma/browser/newma.contribution.js';
 import './services/keybinding/common/keybindingEditing.js';
 import './services/decorations/browser/decorationsService.js';
 import './services/dialogs/common/dialogService.js';
@@ -92,6 +93,7 @@ import './services/extensionRecommendations/common/workspaceExtensionsConfig.js'
 import './services/extensionManagement/common/extensionFeaturesManagemetService.js';
 import './services/notification/common/notificationService.js';
 import './services/userDataSync/common/userDataSyncUtil.js';
+import '../platform/newmaAi/browser/newmaAiService.js';
 import './services/userDataProfile/browser/userDataProfileImportExportService.js';
 import './services/userDataProfile/browser/userDataProfileManagement.js';
 import './services/userDataProfile/common/remoteUserDataProfiles.js';

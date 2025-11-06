@@ -1,7 +1,16 @@
 {
-	"nameShort": "Code - OSS",
-	"nameLong": "Code - OSS",
-	"applicationName": "code-oss",
+	"nameShort": "Newma",
+	"nameLong": "Newma",
+	"applicationName": "newma",
+	"newma": {
+		"enableCore": true,
+		"disableBuiltinChat": true,
+		"backend": {
+			"baseUrl": "http://127.0.0.1:3901",
+			"timeoutMs": 180000,
+			"apiKeySettingKey": "newma.backend.apiKey"
+		}
+	},
 	"dataFolderName": ".vscode-oss",
 	"win32MutexName": "vscodeoss",
 	"licenseName": "MIT",
@@ -33,6 +42,7 @@
 	"nodejsRepository": "https://nodejs.org",
 	"urlProtocol": "code-oss",
 	"webviewContentExternalBaseUrlTemplate": "https://{{uuid}}.vscode-cdn.net/insider/ef65ac1ba57f57f2a3961bfe94aa20481caca4c6/out/vs/workbench/contrib/webview/browser/pre/",
+
 	"builtInExtensions": [
 		{
 			"name": "ms-vscode.js-debug-companion",

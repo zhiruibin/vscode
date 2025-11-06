@@ -46,9 +46,13 @@ async function main() {
     await ensureNodeModules();
     await getElectron();
     await ensureCompiled();
-    // Can't require this until after dependencies are installed
-    const { getBuiltInExtensions } = require('./builtInExtensions');
-    await getBuiltInExtensions();
+    // allow-any-unicode-next-line
+    // 允许通过环境变量在开发模式下跳过内置扩展同步，避免主目录权限或网络导致的失败
+    if (process.env['VSCODE_SKIP_BUILTINS'] !== '1') {
+        // Can't require this until after dependencies are installed
+        const { getBuiltInExtensions } = require('./builtInExtensions');
+        await getBuiltInExtensions();
+    }
 }
 if (require.main === module) {
     main().catch(err => {

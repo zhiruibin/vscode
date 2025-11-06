@@ -254,6 +254,10 @@ export class SessionsRenderer extends Disposable implements ITreeRenderer<IChatS
 			templateData.container.classList.toggle('multiline', false);
 		}
 
+		// Expose identity for custom UI integrations
+		templateData.container.setAttribute('data-session-id', session.id);
+		templateData.container.setAttribute('data-history-item', String(!!session.isHistory));
+
 		// Prepare tooltip content
 		const tooltipContent = 'tooltip' in session && session.tooltip ?
 			(typeof session.tooltip === 'string' ? session.tooltip :

@@ -5,7 +5,6 @@
 
 import fs from 'fs';
 import path from 'path';
-import os from 'os';
 import rimraf from 'rimraf';
 import es from 'event-stream';
 import rename from 'gulp-rename';
@@ -38,7 +37,8 @@ const root = path.dirname(path.dirname(__dirname));
 const productjson = JSON.parse(fs.readFileSync(path.join(__dirname, '../../product.json'), 'utf8'));
 const builtInExtensions = <IExtensionDefinition[]>productjson.builtInExtensions || [];
 const webBuiltInExtensions = <IExtensionDefinition[]>productjson.webBuiltInExtensions || [];
-const controlFilePath = path.join(os.homedir(), '.vscode-oss-dev', 'extensions', 'control.json');
+// Write control file to workspace-local path to avoid Home dir ACL issues in dev
+const controlFilePath = path.join(root, '.newma', 'control.json');
 const ENABLE_LOGGING = !process.env['VSCODE_BUILD_BUILTIN_EXTENSIONS_SILENCE_PLEASE'];
 
 function log(...messages: string[]): void {

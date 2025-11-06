@@ -44,7 +44,6 @@ exports.getBuiltInExtensions = getBuiltInExtensions;
  *--------------------------------------------------------------------------------------------*/
 const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
-const os_1 = __importDefault(require("os"));
 const rimraf_1 = __importDefault(require("rimraf"));
 const event_stream_1 = __importDefault(require("event-stream"));
 const gulp_rename_1 = __importDefault(require("gulp-rename"));
@@ -56,7 +55,8 @@ const root = path_1.default.dirname(path_1.default.dirname(__dirname));
 const productjson = JSON.parse(fs_1.default.readFileSync(path_1.default.join(__dirname, '../../product.json'), 'utf8'));
 const builtInExtensions = productjson.builtInExtensions || [];
 const webBuiltInExtensions = productjson.webBuiltInExtensions || [];
-const controlFilePath = path_1.default.join(os_1.default.homedir(), '.vscode-oss-dev', 'extensions', 'control.json');
+// Write control file to workspace-local path to avoid Home dir ACL issues in dev
+const controlFilePath = path_1.default.join(root, '.newma', 'control.json');
 const ENABLE_LOGGING = !process.env['VSCODE_BUILD_BUILTIN_EXTENSIONS_SILENCE_PLEASE'];
 function log(...messages) {
     if (ENABLE_LOGGING) {

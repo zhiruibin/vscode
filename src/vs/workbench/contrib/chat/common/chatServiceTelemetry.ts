@@ -277,8 +277,8 @@ export class ChatRequestTelemetry {
 		totalTime: number | undefined;
 		result: ChatProviderInvokedEvent['result'];
 		requestType: ChatProviderInvokedEvent['requestType'];
-		// Should rearrange so these 2 can be in the constructor
-		request: ChatRequestModel;
+		// May be undefined when an error occurs before request construction
+		request: ChatRequestModel | undefined;
 		detectedAgent: IChatAgentData | undefined;
 	}) {
 		if (this.isComplete) {
@@ -298,9 +298,9 @@ export class ChatRequestTelemetry {
 			enableCommandDetection: this.opts.enableCommandDetection,
 			isParticipantDetected: !!detectedAgent,
 			location: this.opts.location,
-			citations: request.response?.codeCitations.length ?? 0,
-			numCodeBlocks: getCodeBlocks(request.response?.response.toString() ?? '').length,
-			attachmentKinds: this.attachmentKindsForTelemetry(request.variableData),
+			citations: request?.response?.codeCitations.length ?? 0,
+			numCodeBlocks: getCodeBlocks(request?.response?.response.toString() ?? '').length,
+			attachmentKinds: this.attachmentKindsForTelemetry(request?.variableData ?? { variables: [] }),
 			model: this.resolveModelId(this.opts.options?.userSelectedModelId),
 		});
 	}

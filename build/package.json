@@ -62,7 +62,6 @@
     "workerpool": "^6.4.0",
     "yauzl": "^2.10.0"
   },
-  "type": "commonjs",
   "scripts": {
     "compile": "cd .. && npx tsgo --project build/tsconfig.build.json",
     "watch": "cd .. && npx tsgo --project build/tsconfig.build.json --watch",

@@ -37,6 +37,11 @@ import { ChatSessionUri } from '../common/chatUri.js';
 import { ChatAgentLocation, ChatModeKind } from '../common/constants.js';
 import { ChatWidget, IChatViewState } from './chatWidget.js';
 import { ChatViewWelcomeController, IViewWelcomeDelegate } from './viewsWelcome/chatViewWelcomeController.js';
+import { IActionViewItemService } from '../../../../platform/actions/browser/actionViewItemService.js';
+import { MenuId } from '../../../../platform/actions/common/actions.js';
+import { IAction } from '../../../../base/common/actions.js';
+import { IDropdownMenuActionViewItemOptions } from '../../../../base/browser/ui/dropdown/dropdownActionViewItem.js';
+import { IActionViewItem } from '../../../../base/browser/ui/actionbar/actionbar.js';
 
 interface IViewPaneState extends IChatViewState {
 	sessionId?: string;
@@ -73,6 +78,7 @@ export class ChatViewPane extends ViewPane implements IViewWelcomeDelegate {
 		@ILogService private readonly logService: ILogService,
 		@ILayoutService private readonly layoutService: ILayoutService,
 		@IChatSessionsService private readonly chatSessionsService: IChatSessionsService,
+		@IActionViewItemService private readonly actionViewItemService: IActionViewItemService,
 	) {
 		super(options, keybindingService, contextMenuService, configurationService, contextKeyService, viewDescriptorService, instantiationService, openerService, themeService, hoverService);
 
@@ -138,6 +144,30 @@ export class ChatViewPane extends ViewPane implements IViewWelcomeDelegate {
 		} : undefined;
 	}
 
+	override createActionViewItem(action: IAction, options?: IDropdownMenuActionViewItemOptions): IActionViewItem | undefined {
+		// First check if there's a custom ActionViewItem provider registered for this action
+		console.log('[ChatViewPane] createActionViewItem called for action:', action.id);
+		const provider = this.actionViewItemService.lookUp(MenuId.ViewTitle, action.id);
+		if (provider) {
+			console.log('[ChatViewPane] Found ActionViewItem provider for action:', action.id);
+			try {
+				const viewItem = provider(action, options ?? {}, this.instantiationService, getWindow(this.element).vscodeWindowId);
+				if (viewItem) {
+					console.log('[ChatViewPane] Created custom ActionViewItem:', viewItem);
+					return viewItem;
+				} else {
+					console.warn('[ChatViewPane] Provider returned undefined for action:', action.id);
+				}
+			} catch (error) {
+				console.error('[ChatViewPane] Error creating ActionViewItem:', error);
+			}
+		} else {
+			console.log('[ChatViewPane] No ActionViewItem provider found for action:', action.id);
+		}
+		// Fallback to default implementation
+		return super.createActionViewItem(action, options);
+	}
+
 	private async updateModel(model?: IChatModel | undefined, viewState?: IChatViewState): Promise<void> {
 		this.modelDisposables.clear();
 
@@ -160,12 +190,9 @@ export class ChatViewPane extends ViewPane implements IViewWelcomeDelegate {
 	}
 
 	override shouldShowWelcome(): boolean {
-		const noPersistedSessions = !this.chatService.hasSessions();
-		const hasCoreAgent = this.chatAgentService.getAgents().some(agent => agent.isCore && agent.locations.includes(this.chatOptions.location));
-		const hasDefaultAgent = this.chatAgentService.getDefaultAgent(this.chatOptions.location) !== undefined; // only false when Hide Copilot has run and unregistered the setup agents
-		const shouldShow = !hasCoreAgent && (!hasDefaultAgent || !this._widget?.viewModel && noPersistedSessions);
-		this.logService.trace(`ChatViewPane#shouldShowWelcome(${this.chatOptions.location}) = ${shouldShow}: hasCoreAgent=${hasCoreAgent} hasDefaultAgent=${hasDefaultAgent} || noViewModel=${!this._widget?.viewModel} && noPersistedSessions=${noPersistedSessions}`);
-		return !!shouldShow;
+		// For custom AI implementations, always return false to bypass welcome screen
+		// This prevents authentication dialogs from appearing
+		return false;
 	}
 
 	private getTransferredOrPersistedSessionInfo(): { sessionId?: string; inputValue?: string; mode?: ChatModeKind } {
