@@ -178,24 +178,37 @@ chatRouter.post('/', async (req, res) => {
                             break;
                         }
                         const chunk = decoder.decode(value, { stream: true });
-                        // If upstream already sends SSE lines, pass through; otherwise wrap as SSE JSON delta
+                        // If upstream already sends SSE lines, parse and filter; otherwise wrap as SSE JSON delta
                         const parts = chunk.split('\n\n');
                         for (const part of parts) {
                             if (!part) {
                                 continue;
                             }
                             if (part.startsWith('data:')) {
-                                // passthrough SSE line(s)
                                 usedPassthroughSSE = true;
                                 const line = part.trimEnd();
-                                if (line.trim() === 'data: [DONE]') {
+                                const jsonStr = line.slice(5).trim(); // remove "data:" prefix
+                                if (jsonStr === '[DONE]') {
                                     if (!sawDone) {
                                         res.write('data: [DONE]\n\n');
                                         sawDone = true;
                                     }
                                 }
                                 else {
-                                    res.write(line + '\n\n');
+                                    // Only passthrough SSE frames that contain actual content
+                                    try {
+                                        const obj = JSON.parse(jsonStr);
+                                        const hasContent = obj.choices?.[0]?.delta?.content &&
+                                            typeof obj.choices[0].delta.content === 'string' &&
+                                            obj.choices[0].delta.content.trim().length > 0;
+                                        if (hasContent) {
+                                            res.write(line + '\n\n');
+                                        }
+                                        // Skip frames that only have finish_reason, usage, id, etc.
+                                    }
+                                    catch {
+                                        // If not JSON, skip this line (could be malformed SSE)
+                                    }
                                 }
                             }
                             else {
